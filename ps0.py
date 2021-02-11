@@ -1,8 +1,8 @@
 # Importing necessary library
 import math
 
-# The value of x and y. These two lines asks the value of x and y from the user. 
-# int changes the value of x from string to integer
+# Setting the value of x and y. input() lets the user set the value of x and y.
+# These two lines asks the value of x and y from the user. int() changes the value of x from string to integer
 x = int(input('Enter a value: x = '))
 y = int(input('Enter a value: y = '))
 
