@@ -1,5 +1,3 @@
-
-
 # Salary of the person
 annual_salary = float(input('Enter your annual salary: '))
 # The portion of salary to be saved
@@ -38,15 +36,19 @@ r = 0.04
 # total down payment required for the house. Since the monthly salary is increases
 # semiannually the savings also increase which is accounted by the if statement. 
 while current_savings<=total_down_payment:
-	months += 1
+	months += 1													# Increasing number of months
 	monthly_return = current_savings * (r/12)					# Monthly return from your investment
 	current_savings += monthly_return + monthly_salary_savings	# Total saving from your investment and your salary. 
 	if months % 6 == 0 :										# Checking the 6th month.  
 		monthly_salary += semi_annual_raise*monthly_salary 		# Increasing the monthly salary
 		monthly_salary_savings = monthly_salary * portion_saved # Increasing the savings with respect to the salary increase.
-														# Increasing number of months	
+			
+# Print the total number of months it takes to pay the down payment.															
 print(months)
 
 		
+
+
+
 
 
