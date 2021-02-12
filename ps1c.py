@@ -1,7 +1,19 @@
+# ---------------------------Intro to Programming----------------------------------
+
+# MIT PS1C
+
+# Date : 2021-02-11
+
+# Created by: Cyrus Gautam
+
+# Tutor: Andrew Hamilton
+
+#----------------------------------------------------------------------------------
+
 # Initial annual salary of a person.
 initial_annual_salary = float(input('Enter your starting annual salary: '))
 
-
+# Given
 # Initial value of different variables.
 cost = 1000000
 portion_down_payment = 0.25 
@@ -11,13 +23,14 @@ annual_return = 0.04
 epsilon = 100
 
 
+
 # Initializing variables for bisection method.
 # Highest possible rate.
 higher_rate = 10000
 # lowest possible rate.
 lower_rate = 0
 # Initially I set our main rate as the highest rate. 
-guess_rate = (higher_rate+lower_rate)/2
+guess_rate = higher_rate
 
 
 
@@ -31,7 +44,6 @@ possible_in_three_years = True
 
 # Main program
 while True:
-    steps += 1
     annual_salary = initial_annual_salary
     # Since our rate is usually between 0 to 100%, and we are printing our rate in
     # decimals we have to divide our rate by 10000. It is because even if our optimum
@@ -78,6 +90,9 @@ while True:
     # If the difference is smaller or equal to epsilon then we don't need any more iteration.
     if abs(current_savings - down_payment) <= epsilon:
         break
+    # Count the number of steps.
+    steps += 1
+
     
 # If we can pay the payment in three years we can print the rate and no of steps.
 # If we can't we print that it is not possible.
