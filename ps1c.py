@@ -17,7 +17,7 @@ higher_rate = 10000
 # lowest possible rate.
 lower_rate = 0
 # Initially I set our main rate as the highest rate. 
-guess_rate = higher_rate
+guess_rate = (higher_rate+lower_rate)/2
 
 
 
@@ -42,16 +42,16 @@ while True:
     # Our initial savings and initial months.
     current_savings = 0.0
     months = 0
-
+    print("guess=", guess_rate) #checker 
     # Since we are calculating the savings for 36 months, we use for loop to iterate
     # if for 36 times.
     for months in range(1,37):        
         current_savings += monthly_savings + (current_savings * (annual_return / 12))
-        months += 1
         # Increasing the salary after every 6 months.    
         if months % 6 == 0:
             annual_salary += annual_salary * semi_annual_raise
-            monthly_savings = (annual_salary/12)* main_rate            
+            monthly_savings = (annual_salary/12)* main_rate
+    print("i= ",  months, "savings= ", current_savings) #checker          
     
 
     # Now we need to check if our current_savings is more than or less than our

@@ -1,3 +1,14 @@
+# ---------------------------Intro to Programming----------------------------------
+
+# MIT PS1B
+
+# Date : 2021-02-11
+
+# Created by: Cyrus Gautam
+
+# Tutor: Andrew Hamilton
+
+#----------------------------------------------------------------------------------
 # Salary of the person
 annual_salary = float(input('Enter your annual salary: '))
 # The portion of salary to be saved
