@@ -30,14 +30,14 @@ months = 0
 # Initial savings for the house.
 current_savings = 0
 # Interest rate of investment.
-r = 0.04
+annual_return = 0.04
 
 # Main program. This program runs until the saving is smaller than the
 # total down payment required for the house. Since the monthly salary is increases
 # semiannually the savings also increase which is accounted by the if statement. 
 while current_savings<=total_down_payment:
 	months += 1													# Increasing number of months
-	monthly_return = current_savings * (r/12)					# Monthly return from your investment
+	monthly_return = current_savings * (annual_return/12)		# Monthly return from your investment
 	current_savings += monthly_return + monthly_salary_savings	# Total saving from your investment and your salary. 
 	if months % 6 == 0 :										# Checking the 6th month.  
 		monthly_salary += semi_annual_raise*monthly_salary 		# Increasing the monthly salary
