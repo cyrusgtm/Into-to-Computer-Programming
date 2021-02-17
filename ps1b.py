@@ -9,6 +9,8 @@
 # Tutor: Andrew Hamilton
 
 #----------------------------------------------------------------------------------
+
+
 # Salary of the person
 annual_salary = float(input('Enter your annual salary: '))
 # The portion of salary to be saved
@@ -17,11 +19,6 @@ portion_saved = float(input('Enter the percent of your salary to save, as a deci
 cost = float(input('Enter the cost of your dream house: '))
 # The semi-annual salary raise
 semi_annual_raise = float(input('Enter the semi annual salary raise: '))
-
-# annual_salary = 120000
-# portion_saved = 0.05
-# cost = 500000
-# semi_annual_raise = 0.03
 
 
 # Portion/Percent of the down payment that you have to pay.
