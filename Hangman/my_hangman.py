@@ -129,7 +129,31 @@ def get_available_letters(letters_guessed):
 
 #-------------------------------------------------------------------------------------------------------------------------
 	
-def hangman_with_hints(secret_word):
+def hangman(secret_word):
+	'''
+    secret_word: string, the secret word to guess.
+    
+    Starts up an interactive game of Hangman.
+    
+    * At the start of the game, let the user know how many 
+      letters the secret_word contains and how many guesses s/he starts with.
+      
+    * The user should start with 6 guesses
+
+    * Before each round, you should display to the user how many guesses
+      s/he has left and the letters that the user has not yet guessed.
+    
+    * Ask the user to supply one guess per round. Remember to make
+      sure that the user puts in a letter!
+    
+    * The user should receive feedback immediately after each guess 
+      about whether their guess appears in the computer's word.
+
+    * After each guess, you should display to the user the 
+      partially guessed word so far.
+    
+    '''
+    # FILL IN YOUR CODE HERE AND DELETE "pass"
 	allLetters = string.ascii_lowercase				
 	all_letter_guessed = []						# list for all the letters guessed
 	correct_letter_list = []					# list for all the correct letters guessed
@@ -275,7 +299,7 @@ def match_with_gaps(my_word, other_word):
 def show_possible_matches(my_word):
 	'''
     my_word: string with _ characters, current guess of secret word
-    returns: nothing, but should print out every word in wordlist that matches my_word
+    returns: print out every word in wordlist that matches my_word
              Keep in mind that in hangman when a letter is guessed, all the positions
              at which that letter occurs in the secret word are revealed.
              Therefore, the hidden letter(_ ) cannot be one of the letters in the word
@@ -292,13 +316,42 @@ def show_possible_matches(my_word):
 			all_words.append(j)
 		else:
 			pass
-	print(all_words)
-	
+
+	if len(all_words)> 0:
+		return ", ".join(all_words)
+	else:
+		return 'No match found'
+
 
 #-------------------------------------------------------------------------------------------------------------------------
 
 	
 def hangman_with_hints(secret_word):
+	    '''
+    secret_word: string, the secret word to guess.
+    
+    Starts up an interactive game of Hangman.
+    
+    * At the start of the game, let the user know how many 
+      letters the secret_word contains and how many guesses s/he starts with.
+      
+    * The user should start with 6 guesses
+    
+    * Before each round, you should display to the user how many guesses
+      s/he has left and the letters that the user has not yet guessed.
+    
+    * Ask the user to supply one guess per round. Make sure to check that the user guesses a letter
+      
+    * The user should receive feedback immediately after each guess 
+      about whether their guess appears in the computer's word.
+
+    * After each guess, you should display to the user the 
+      partially guessed word so far.
+      
+    * If the guess is the symbol *, print out all words in wordlist that
+      matches the current guessed word. 
+    
+    '''
 	allLetters = string.ascii_lowercase
 	all_letter_guessed = []						# list for all the letters guessed
 	correct_letter_list = []					# list for all the correct letters guessed
