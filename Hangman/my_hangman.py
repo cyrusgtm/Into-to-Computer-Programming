@@ -128,8 +128,6 @@ def get_available_letters(letters_guessed):
 		
 
 #-------------------------------------------------------------------------------------------------------------------------
-	
-def hangman(secret_word):
 	'''
     secret_word: string, the secret word to guess.
     
@@ -153,7 +151,8 @@ def hangman(secret_word):
       partially guessed word so far.
     
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
+    # FILL IN YOUR CODE HERE AND DELETE "pass"	
+def hangman(secret_word):
 	allLetters = string.ascii_lowercase				
 	all_letter_guessed = []						# list for all the letters guessed
 	correct_letter_list = []					# list for all the correct letters guessed
@@ -324,10 +323,7 @@ def show_possible_matches(my_word):
 
 
 #-------------------------------------------------------------------------------------------------------------------------
-
-	
-def hangman_with_hints(secret_word):
-	    '''
+	'''
     secret_word: string, the secret word to guess.
     
     Starts up an interactive game of Hangman.
@@ -351,7 +347,10 @@ def hangman_with_hints(secret_word):
     * If the guess is the symbol *, print out all words in wordlist that
       matches the current guessed word. 
     
+    Follows the other limitations detailed in the problem write-up.
     '''
+	
+def hangman_with_hints(secret_word):
 	allLetters = string.ascii_lowercase
 	all_letter_guessed = []						# list for all the letters guessed
 	correct_letter_list = []					# list for all the correct letters guessed
@@ -460,14 +459,14 @@ if __name__ == "__main__":
     # To test part 2, comment out the pass line above and
     # uncomment the following two lines.
     
-    # secret_word = choose_word(wordlist)
-    # hangman(secret_word)
+    secret_word = choose_word(wordlist)
+    hangman(secret_word)
 
 ###############
     
     # To test part 3 re-comment out the above lines and 
     # uncomment the following two lines. 
     
-    secret_word = choose_word(wordlist)
-    hangman_with_hints(secret_word)
+    # secret_word = choose_word(wordlist)
+    # hangman_with_hints(secret_word)
 
