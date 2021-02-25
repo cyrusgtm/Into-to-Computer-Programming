@@ -70,7 +70,11 @@ class SubMessage(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        try: 
+            self.valid_words = load_words(file_name)
+        except NameError:
+            self.valid_words = load_words(WORDLIST_FILENAME)
     
     def get_message_text(self):
         '''
@@ -78,8 +82,7 @@ class SubMessage(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
-
+        return self.message_text
     def get_valid_words(self):
         '''
         Used to safely access a copy of self.valid_words outside of the class.
@@ -87,7 +90,7 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words[:]
                 
     def build_transpose_dict(self, vowels_permutation):
         '''
@@ -108,8 +111,17 @@ class SubMessage(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
+        dictionary_mapping = {}        
+        for letter in string.ascii_lowercase:
+            if letter in VOWELS_LOWER:
+                vowel_index = str.lower(VOWELS_LOWER).find(letter)
+                dictionary_mapping[letter] = vowels_permutation[vowel_index]
+                dictionary_mapping[str.upper(letter)] = str.upper(vowels_permutation[vowel_index])
+            else:
+                dictionary_mapping[letter] = letter
+                dictionary_mapping[str.upper(letter)] = str.upper(letter)
+        return dictionary_mapping
         
-        pass #delete this line and replace with your code here
     
     def apply_transpose(self, transpose_dict):
         '''
@@ -118,8 +130,13 @@ class SubMessage(object):
         Returns: an encrypted version of the message text, based 
         on the dictionary
         '''
+        new_message = ''
+        for char in self.message_text:
+            if char in string.ascii_letters:
+                char = transpose_dict[char]
+            new_message += char
+        return new_message
         
-        pass #delete this line and replace with your code here
         
 class EncryptedSubMessage(SubMessage):
     def __init__(self, text):
@@ -132,7 +149,7 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        SubMessage.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -152,7 +169,28 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
+        max_number_of_real_words = 0
+        decrypted_message = ''
+        vowels_permutation = get_permutations(VOWELS_LOWER)
+        for permutation in vowels_permutation:
+            number_of_real_words = 0
+            transpose_dict = self.build_transpose_dict(permutation)
+            decoded_messeage = self.apply_transpose(transpose_dict)
+            for word in decoded_messeage.split(' '):
+                if len(word)==1:
+                    if word in string.ascii_letters:
+                        if is_word(self.get_valid_words(), word) == True:
+                            number_of_real_words+=1
+                else:
+                    if is_word(self.get_valid_words(), word) == True:
+                        number_of_real_words+=1
+            if number_of_real_words > max_number_of_real_words:
+                    max_number_of_real_words = number_of_real_words
+                    decrypted_message = decoded_messeage
+        if max_number_of_real_words == 0:
+            return self.message_text
+        else:
+            return decrypted_message
     
 
 if __name__ == '__main__':

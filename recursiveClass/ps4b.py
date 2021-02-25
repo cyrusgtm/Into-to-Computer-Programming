@@ -70,7 +70,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def get_message_text(self):
         '''
@@ -78,7 +79,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +88,7 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +104,39 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        # Creating a new empty dictionary
+        self.dictionary = {}
+        # list containing all the lowercase letters. This will be used as the keys of our new dictionary.
+        lowerKeys = list(string.ascii_lowercase)
+        # list containing all the lowercase letters. This will be used as values for our new dictionary
+        lowerValues = list(string.ascii_lowercase)
+        # Shift. If, for example, 2 is the shift then this line of code will take the two letters and it will
+        # attach it to the end of the group of letters.
+        lowerShift = lowerValues[shift:] + lowerValues[:shift]
+
+
+        # list containing all the uppercase letters. This will also be used as the keys of our new dictionary.
+        upperKeys = list(string.ascii_uppercase)
+        # list contauining all the uppercase letters. This will be used as values of our new dictionary
+        upperValues = list(string.ascii_uppercase)
+        # Shifting letters as before.
+        upperShift = upperValues[shift:] + upperValues[:shift]
+
+        # Since, we need both uppercase and lowercase letters, we combine the upper keys and value and the lower
+        # keys and values to get a bigger list.
+        allKeys = lowerKeys + upperKeys
+        allValues = lowerShift + upperShift
+
+        # The bigger list is then added to the dictionary. It is mapped in a way that the keys of our dictionary
+        # are the normal alphabets whereas the values are the shifted alphabets.
+        for i in range(len(allValues)):
+            self.dictionary[allKeys[i]] = allValues[i]
+
+
+        return self.dictionary
+
+
+
 
     def apply_shift(self, shift):
         '''
@@ -116,8 +149,26 @@ class Message(object):
 
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
+
         '''
-        pass #delete this line and replace with your code here
+        # list that will contain the shifted message
+        shiftedMessage = []
+        # iterate through the provided message
+        for i in self.message_text:
+            # check if the letter from the above iteration is in our main dictionary(from above) or not.
+            if i in self.build_shift_dict(shift).keys():
+                # if it is, then add the values of that letter from the above dictionary to the shifted
+                # Message list.
+                shiftedMessage.append(self.dictionary[i])
+            else:
+                # If not, just add the letter to the list.
+                shiftedMessage.append(i)
+        return ''.join(shiftedMessage)
+
+        
+
+
+
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -135,15 +186,20 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
-
+        self.shift = shift
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
+        # self.encrypting_dict = super(PlaintextMessage, self).build_shift_dict(shift)
+        # self.message_text_encrypted = super(PlaintextMessage, self).apply_shift(shift)
+        self.encrypting_dict = Message.build_shift_dict(self, shift)
+        self.message_text_encrypted = Message.apply_shift(self, shift)
     def get_shift(self):
         '''
         Used to safely access self.shift outside of the class
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encryption_dict(self):
         '''
@@ -151,7 +207,8 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encryption_dict
         '''
-        pass #delete this line and replace with your code here
+        encrypting_dict_copy = self.encrypting_dict.copy()
+        return encrypting_dict_copy
 
     def get_message_text_encrypted(self):
         '''
@@ -159,19 +216,21 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
         Changes self.shift of the PlaintextMessage and updates other 
         attributes determined by shift.        
-        
+
         shift (integer): the new shift that should be associated with this message.
         0 <= shift < 26
 
         Returns: nothing
-        '''
-        pass #delete this line and replace with your code here
+            '''
+        self.shift = shift
+        self.encrypting_dict = Message.build_shift_dict(self, shift)
+        self.message_text_encrypted = Message.apply_shift(self, shift)
 
 
 class CiphertextMessage(Message):
@@ -185,7 +244,8 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def decrypt_message(self):
         '''
@@ -203,22 +263,39 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
+        validWord = 0
+        maxCount = 0
+        for i in range(26):
+            # for j in list(super(CiphertextMessage, self).apply_shift(i).split(' ')):
+            for j in list(Message.apply_shift(self, i).split(' ')):
+                if is_word(self.valid_words, j):
+                    validWord += 1
+                if validWord > maxCount:
+                    maxCount = validWord
+                    bestShift = i
+                    decryptedMsg = Message.apply_shift(self, i)
+                        
+        return (bestShift, decryptedMsg)
+
 
 if __name__ == '__main__':
-
-#    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
-#    print('Actual Output:', plaintext.get_message_text_encrypted())
+   #Example test case (PlaintextMessage)
+   plaintext = PlaintextMessage('hello', 2)
+   print('Expected Output: jgnnq')
+   print('Actual Output:', plaintext.get_message_text_encrypted())
 #
-#    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
-#    print('Actual Output:', ciphertext.decrypt_message())
+   #Example test case (CiphertextMessage)
+   ciphertext = CiphertextMessage('jgnnq')
+   print('Expected Output:', (24, 'hello'))
+   print('Actual Output:', ciphertext.decrypt_message())
 
     #TODO: WRITE YOUR TEST CASES HERE
 
     #TODO: best shift value and unencrypted story 
     
-    pass #delete this line and replace with your code here
+    # pass #delete this line and replace with your code here
+
+
+
+
+
