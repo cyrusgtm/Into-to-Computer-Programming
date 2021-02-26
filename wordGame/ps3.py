@@ -56,7 +56,7 @@ def get_frequency_dict(sequence):
     # freqs: dictionary (element_type -> int)
     freq = {}
     for x in sequence:
-        freq[x] = freq.get(x,0)
+        freq[x] = freq.get(x,0)+1
     return freq
 	
 
@@ -343,3 +343,79 @@ def play_game(word_list):
 if __name__ == '__main__':
     word_list = load_words()
     play_game(word_list)
+
+
+
+     word=word.lower()
+     newHand=hand.copy()
+    
+    if word.lower() not in word_list: 
+        return False
+    
+    for i in word.lower():
+        if i not in newHand.keys():
+            return False
+        else:
+            newHand[i]-=1
+            if newHand.get(i,0)==0:
+                del(newHand[i])
+    return True
+
+
+
+
+
+    word=word.lower()
+    
+    if not (WILDCARD in word):
+        if not word in word_list: 
+            return False
+    else:
+        canMakeWord=False
+        for k in VOWELS:
+            if (word.replace(WILDCARD,k) in word_list):
+                canMakeWord=True
+                break
+        if not canMakeWord:
+            return False
+    theHand=hand.copy()
+    
+    #single loop will handle situations in which param word
+    #has a wildcard as well as those in which it doesn't
+    
+    #for now, the wildcard, even if used (i.e. it's present in the word), will 
+    #never be deleted from the hand
+    for lett in word:
+        if not lett in theHand.keys():
+            return False
+        else:
+            theHand[lett]-=1
+            if theHand.get(lett,0)==0:
+                del(theHand[lett])
+    return True   
+#
+
+
+
+
+   valid = True
+    currHand = hand.copy()
+    for letter in word.lower():
+        #if letter is valid update hand should always return a different hand
+        #uses a temporary hand to compare against hand before checking letter
+        tempHand = update_hand(currHand, letter)
+        if currHand == tempHand:
+            valid = False
+        #update current hand to reflect letters being used
+        currHand = tempHand
+
+    #if no instances of wildcard, return as normal
+    if word.find('*') == -1:   
+        return word.lower() in word_list and valid
+    
+    #replace wildcard with every vowel and check if word exists
+    found = False
+    for vowel in VOWELS:
+        if word.lower().replace('*', vowel) in word_list:
+            found = True
+    return found and valid
