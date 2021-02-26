@@ -1,7 +1,7 @@
 # Problem Set 4C
-# Name: <your name here>
-# Collaborators:
-# Time Spent: x:xx
+# Name: Cyrus Raj Gautam
+# Collaborators: None
+# Time Spent: 3 hours
 
 import string
 from ps4a import get_permutations
@@ -144,7 +144,7 @@ class SubMessage(object):
         for i in self.message_text:
             # If the letter is an alphabet
             if i in string.ascii_letters:
-                # Set the alphavbet to it's value from the transpose dictionary
+                # Set the alphabet to it's value from the transpose dictionary
                 i = transpose_dict[i]
             newMessage += i
         return newMessage
@@ -181,23 +181,40 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
+        # The maximum valid word that will be calculated
         maxValidWord = 0
+        # Get all the permutation possible for our string of vowels
         vowelsPermutation = get_permutations(VOWELS_LOWER)
+        # Iterate through all the Permutation of vowels.
+        decryptedMessage = ''
         for permutation in vowelsPermutation:
+            # Count of all the valid word while testing
             validWords = 0
+            # Building a dictionary using the permutation
             transposeDictionary = self.build_transpose_dict(permutation)
-            # decoded_message = self.apply_transpose(transpose_dict)
+            # iterating through all the word in made up using the permutation
             for word in self.apply_transpose(transposeDictionary).split():
+                # if the word has length 1
                 if len(word)==1:
+                    # If the word with length 1 is a valid alphabet
                     if word in string.ascii_letters:
+                         # if that valid alphabet is a valid word, then we increase our validWord count
                         if is_word(self.get_valid_words(), word) == True:
                             validWords+=1
                 else:
+                    # If the word is greater than length 1 and is a valid word, then we increase
+                    # our validWord count
                     if is_word(self.get_valid_words(), word) == True:
                         validWords+=1
+
+            # if the validWord count is greater than max Valid word, then change the max valid word count
+            # to valid word count. Also get the sentence/word with the max valid word and set it as
+            # our decrypted message          
             if validWords > maxValidWord:
-                    maxValidWord = maxValidWord
+                    maxValidWord = validWords
                     decryptedMessage = self.apply_transpose(transposeDictionary)
+
+        # If our max Valid word is 0, return the initial message itself, else return the decrypted message.
         if maxValidWord == 0:
             return self.message_text
         else:
@@ -207,6 +224,7 @@ class EncryptedSubMessage(SubMessage):
 if __name__ == '__main__':
 
     # Example test case
+    print('Example 1')
     message = SubMessage("Hello World!")
     permutation = "eaiuo"
     enc_dict = message.build_transpose_dict(permutation)
@@ -215,9 +233,10 @@ if __name__ == '__main__':
     print("Actual encryption:", message.apply_transpose(enc_dict))
     enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     print("Decrypted message:", enc_message.decrypt_message())
+    print('-------------------------------------------------------')
      
     #TODO: WRITE YOUR TEST CASES HERE
-
+    print('Test Case 1')
     message = SubMessage("I'll be there for you.")
     permutation = "aueio"
     enc_dict = message.build_transpose_dict(permutation)
@@ -226,7 +245,16 @@ if __name__ == '__main__':
     print("Actual encryption:", message.apply_transpose(enc_dict))
     enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     print("Decrypted message:", enc_message.decrypt_message())
-     
+    print('-------------------------------------------------------')
 
-    message = SubMessage("Hello World!")
-    print(message.build_transpose_dict('aioue'))
+    print('Test case 2')
+    message = SubMessage("Knock knock! Who's there? Tank. Tank who? You are welcome.")
+    permutation = "uoiea"
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(), "Permutation:", permutation)
+    print("Expected encryption:", "Kneck kneck! Whe's thoro? Tunk. Tunk whe? Yea uro wolcemo.")
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
+    print('-------------------------------------------------------')
+     

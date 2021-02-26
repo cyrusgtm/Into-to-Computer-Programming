@@ -296,34 +296,46 @@ class CiphertextMessage(Message):
 
 if __name__ == '__main__':
    #Example test case (PlaintextMessage)
+   print('Example Plaintext test')
    plaintext = PlaintextMessage('hello', 2)
    print('Expected Output: jgnnq')
    print('Actual Output:', plaintext.get_message_text_encrypted())
+   print('----------------------------------------------')
 #
    #Example test case (CiphertextMessage)
+   print('Example Ciphertext test')
    ciphertext = CiphertextMessage('jgnnq')
    print('Expected Output:', (24, 'hello'))
    print('Actual Output:', ciphertext.decrypt_message())
+   print('----------------------------------------------')
 
    # Test 1 for plain text
+   print('Test 1: Plaintext message')
    plaintext = PlaintextMessage('Harry Potter', 1)
    print('Expected Output: Ibssz Qpuufs')
    print('Actual Output:', plaintext.get_message_text_encrypted())
+   print('----------------------------------------------')
 
    # Test 1 for  Cipher text
+   print('Test 1: Ciphertext message')
    story = get_story_string()
    ciphertext = CiphertextMessage(story)
    print('Unencypted story:', ciphertext.decrypt_message())
+   print('----------------------------------------------')
 
    # Test 2 for Plain Text
-   plaintext = PlaintextMessage('I love dogs.', 2)
-   print('Expected Output: K nqxg fqiu.')
+   print('Test 2: Plaintext message')
+   plaintext = PlaintextMessage('I love dogs.', 3)
+   print('Expected Output: L oryh grjv.')
    print('Actual Output:', plaintext.get_message_text_encrypted())
+   print('----------------------------------------------')
 
    # Test 2 for  Cipher text
-   ciphertext = CiphertextMessage('K nqxg fqiu.')
-   print('Expected Output:', (24, 'I love dogs.'))
+   print('Test 2: Ciphertext message')
+   ciphertext = CiphertextMessage('L oryh grjv.')
+   print('Expected Output:', (23, 'I love dogs.'))
    print('Actual Output:', ciphertext.decrypt_message())
+   print('----------------------------------------------')
 
 
 
