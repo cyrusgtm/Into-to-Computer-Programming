@@ -1,7 +1,7 @@
 # Problem Set 4B
-# Name: <your name here>
-# Collaborators:
-# Time Spent: x:xx
+# Name: Cyrus Raj Gautam
+# Collaborators: None
+# Time Spent: 6 hours
 
 import string
 
@@ -168,8 +168,6 @@ class Message(object):
         
 
 
-
-
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
         '''
@@ -189,8 +187,6 @@ class PlaintextMessage(Message):
         self.shift = shift
         self.message_text = text
         self.valid_words = load_words(WORDLIST_FILENAME)
-        # self.encrypting_dict = super(PlaintextMessage, self).build_shift_dict(shift)
-        # self.message_text_encrypted = super(PlaintextMessage, self).apply_shift(shift)
         self.encrypting_dict = Message.build_shift_dict(self, shift)
         self.message_text_encrypted = Message.apply_shift(self, shift)
     def get_shift(self):
@@ -263,19 +259,39 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        validWord = 0
-        maxCount = 0
+        # The maximum valid word that will be calculated
+        maxValidWord = 0
+        # The optimum shift while iterating
+        bestShift = 0
+        # Our final decrypted Message
+        # decryptedMessage = ''
+        # Iterating through all the alphabet(# of alphabet = 26)
         for i in range(26):
-            # for j in list(super(CiphertextMessage, self).apply_shift(i).split(' ')):
-            for j in list(Message.apply_shift(self, i).split(' ')):
-                if is_word(self.valid_words, j):
-                    validWord += 1
-                if validWord > maxCount:
-                    maxCount = validWord
-                    bestShift = i
-                    decryptedMsg = Message.apply_shift(self, i)
-                        
-        return (bestShift, decryptedMsg)
+            # Count of all the valid word while testing
+            validWord = 0
+            # applying the shift from range 0-25. 
+            for word in (self.apply_shift(i)).split():
+                # After the shift if the length of the word is 1
+                if len(word)==1:
+                    # If the word with length 1 is a valid alphabet
+                    if word in string.ascii_letters:
+                        # if that valid alphabet is a valid word, then we increase our validWord count
+                        if is_word(self.get_valid_words(), word) == True:
+                            validWord+=1
+                else:
+                    # If the word is greater than length 1 and is a valid word, then we increase
+                    # our validWord count
+                    if is_word(self.get_valid_words(), word) == True:
+                        validWord+=1
+            # if the valitWord count is greater than max Valid word, then change the max valid word count
+            # to valid word count. Through the iteration, almost every iteration(while shifting letters) will 
+            # have some words that are real words. The more real words form in iteration the more the count for
+            # maxValidWord will change.
+            if validWord > maxValidWord:
+                maxValidWord = validWord
+                bestShift = i                       # After findin the best match set your optimum shift to the i
+                decryptedMessage = self.apply_shift(i) # Our decrypted message
+        return (bestShift, decryptedMessage)
 
 
 if __name__ == '__main__':
@@ -289,11 +305,26 @@ if __name__ == '__main__':
    print('Expected Output:', (24, 'hello'))
    print('Actual Output:', ciphertext.decrypt_message())
 
-    #TODO: WRITE YOUR TEST CASES HERE
+   # Test 1 for plain text
+   plaintext = PlaintextMessage('Harry Potter', 1)
+   print('Expected Output: Ibssz Qpuufs')
+   print('Actual Output:', plaintext.get_message_text_encrypted())
 
-    #TODO: best shift value and unencrypted story 
-    
-    # pass #delete this line and replace with your code here
+   # Test 1 for  Cipher text
+   story = get_story_string()
+   ciphertext = CiphertextMessage(story)
+   print('Unencypted story:', ciphertext.decrypt_message())
+
+   # Test 2 for Plain Text
+   plaintext = PlaintextMessage('I love dogs.', 2)
+   print('Expected Output: K nqxg fqiu.')
+   print('Actual Output:', plaintext.get_message_text_encrypted())
+
+   # Test 2 for  Cipher text
+   ciphertext = CiphertextMessage('K nqxg fqiu.')
+   print('Expected Output:', (24, 'I love dogs.'))
+   print('Actual Output:', ciphertext.decrypt_message())
+
 
 
 

@@ -90,7 +90,8 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        return self.valid_words[:]
+        validWordCopy = self.valid_words[:].copy()
+        return validWordCopy
                 
     def build_transpose_dict(self, vowels_permutation):
         '''
@@ -111,16 +112,25 @@ class SubMessage(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        dictionary_mapping = {}        
+        # Creating a new Dictionary
+        transposeDictionary = {} 
+        # Iterating through the all lowercase alphabets
         for letter in string.ascii_lowercase:
+            # if the letters from the alphabet are vowels
             if letter in VOWELS_LOWER:
-                vowel_index = str.lower(VOWELS_LOWER).find(letter)
-                dictionary_mapping[letter] = vowels_permutation[vowel_index]
-                dictionary_mapping[str.upper(letter)] = str.upper(vowels_permutation[vowel_index])
+                # find the index/position of the vowel in the from 'aeiou'. So if the letter is i the position/index
+                # will be 2 and so on.
+                vowelPosition = str.lower(VOWELS_LOWER).find(letter)
+                # Now set the value of that vowel to the vowel with the same position/index from the permuted vowel string.
+                transposeDictionary[letter] = vowels_permutation[vowelPosition]
+                # Do the same thing with the uppercase Vowels too
+                transposeDictionary[str.upper(letter)] = str.upper(vowels_permutation[vowelPosition])
             else:
-                dictionary_mapping[letter] = letter
-                dictionary_mapping[str.upper(letter)] = str.upper(letter)
-        return dictionary_mapping
+                # If the letter are not vowels then map the letters with themselves for both
+                # upper and lowercase.
+                transposeDictionary[letter] = letter
+                transposeDictionary[str.upper(letter)] = str.upper(letter)
+        return transposeDictionary
         
     
     def apply_transpose(self, transpose_dict):
@@ -130,12 +140,14 @@ class SubMessage(object):
         Returns: an encrypted version of the message text, based 
         on the dictionary
         '''
-        new_message = ''
-        for char in self.message_text:
-            if char in string.ascii_letters:
-                char = transpose_dict[char]
-            new_message += char
-        return new_message
+        newMessage = ''
+        for i in self.message_text:
+            # If the letter is an alphabet
+            if i in string.ascii_letters:
+                # Set the alphavbet to it's value from the transpose dictionary
+                i = transpose_dict[i]
+            newMessage += i
+        return newMessage
         
         
 class EncryptedSubMessage(SubMessage):
@@ -169,28 +181,27 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        max_number_of_real_words = 0
-        decrypted_message = ''
-        vowels_permutation = get_permutations(VOWELS_LOWER)
-        for permutation in vowels_permutation:
-            number_of_real_words = 0
-            transpose_dict = self.build_transpose_dict(permutation)
-            decoded_messeage = self.apply_transpose(transpose_dict)
-            for word in decoded_messeage.split(' '):
+        maxValidWord = 0
+        vowelsPermutation = get_permutations(VOWELS_LOWER)
+        for permutation in vowelsPermutation:
+            validWords = 0
+            transposeDictionary = self.build_transpose_dict(permutation)
+            # decoded_message = self.apply_transpose(transpose_dict)
+            for word in self.apply_transpose(transposeDictionary).split():
                 if len(word)==1:
                     if word in string.ascii_letters:
                         if is_word(self.get_valid_words(), word) == True:
-                            number_of_real_words+=1
+                            validWords+=1
                 else:
                     if is_word(self.get_valid_words(), word) == True:
-                        number_of_real_words+=1
-            if number_of_real_words > max_number_of_real_words:
-                    max_number_of_real_words = number_of_real_words
-                    decrypted_message = decoded_messeage
-        if max_number_of_real_words == 0:
+                        validWords+=1
+            if validWords > maxValidWord:
+                    maxValidWord = maxValidWord
+                    decryptedMessage = self.apply_transpose(transposeDictionary)
+        if maxValidWord == 0:
             return self.message_text
         else:
-            return decrypted_message
+            return decryptedMessage
     
 
 if __name__ == '__main__':
@@ -206,3 +217,16 @@ if __name__ == '__main__':
     print("Decrypted message:", enc_message.decrypt_message())
      
     #TODO: WRITE YOUR TEST CASES HERE
+
+    message = SubMessage("I'll be there for you.")
+    permutation = "aueio"
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(), "Permutation:", permutation)
+    print("Expected encryption:", "E'll bu thuru fir yio.")
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
+     
+
+    message = SubMessage("Hello World!")
+    print(message.build_transpose_dict('aioue'))
